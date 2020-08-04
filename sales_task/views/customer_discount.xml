@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Inherit Form View to Modify it -->
+        <record id="customer_view_form_inherit" model="ir.ui.view">
+            <field name="name">Discount</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='website']" position="after">
+                    <!-- Add your fields or attributes here -->
+                    <field name="customer_discount_code"  groups="sales_task.group_advanced_sale"/>
+                    <field name="valid_code" style="blue" groups="sales_task.group_advanced_sale"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Them field discount_code vao view_part_tree       -->
+        <record model="ir.ui.view" id="view_partner_tree">
+            <field name="name">res.partner.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <tree string="Contacts">
+                    <field name="customer_discount_code"/>
+                </tree>
+                <xpath expr="//field[@name='phone']" position="replace" invisible="1">
+                </xpath>
+                <xpath expr="//field[@name='email']" position="replace" invisible="1">
+                </xpath>
+            </field>
+        </record>
+
+        <!--        Special Customer-->
+        <record id="filter_valid_customer_code_action" model="ir.actions.act_window">
+            <field name="name">Special Customer</field>
+            <field name="res_model">res.partner</field>
+            <field name="domain">[('valid_code', '=', 'Valid code')]</field>
+        </record>
+
+
+        <!--         This Menu Item must have a parent and an action-->
+        <menuitem id="sepcial_customer_menu" name="Special Customer" parent="sale.sale_order_menu"
+                  action="filter_valid_customer_code_action" sequence="7"/>
+
+
+    </data>
+</odoo>
+
+        <!--access_mass_update_code,access.mass_update_code,model_mass_update_code,,1,1,1,1-->
